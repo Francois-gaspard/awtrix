@@ -168,43 +168,28 @@ module AwtrixControl
 
     # Deletes an app from the device.
     #
-    # @param app [App, String] the app or app name to delete
-    def delete_app(app)
-      registered_app = find_app!(app)
-      post('custom', {}, { name: registered_app.name })
-      @apps.delete(registered_app.name)
+    # @param app_name [String, Symbol] the app name to delete
+    def delete_app(app_name)
+      post('custom', {}, { name: app_name })
+      @apps.delete(app_name)
     end
 
     # Deletes all apps from the device.
     def delete_all_apps
-      loop.each_key { |app| delete_app(app) }
+      loop.each_key { |app_name| delete_app(app_name) }
       @apps = {}
     end
 
     # Pushes an app to the device, or updates an existing one.
     #
-    # @param app [App, String] the app or app name to push
-    def push_app(app)
-      registered_app = find_app!(app)
+    # @param app_name [Symbol, String] the app name to push
+    def push_app(app_name)
+      registered_app = @apps[app_name]
+      return unless registered_app
+
       post('custom',
            { name: registered_app.name }.merge(registered_app.payload),
            { name: registered_app.name })
-    end
-
-    private
-
-    # Finds an app by name or raises an error if not found.
-    #
-    # @param app_or_name [App, String] the app or app name to find
-    # @return [App] the found app
-    # @raise [ArgumentError] if the app is not found
-    def find_app!(app_or_name)
-      app_name = app_or_name.is_a?(App) ? app_or_name.name : app_or_name
-      registered_app = @apps[app_name]
-
-      raise ArgumentError, "App #{app_name} not found on client #{self.host}" if registered_app.nil?
-
-      registered_app
     end
   end
 end

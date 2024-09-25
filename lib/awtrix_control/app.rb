@@ -176,7 +176,7 @@ module AwtrixControl
     #
     # @param new_device [Device] the new device to associate the app with
     def device=(new_device)
-      @device.delete_app(self) if @device
+      @device.delete_app(self.name) if @device
       @device = new_device
 
       new_device << self

@@ -110,8 +110,8 @@ describe AwtrixControl::Device do
 
   describe '#notify' do
     it 'makes a call to the notify endpoint of the device' do
-      @device.notify('test_notification')
-      expect_request(method: :post, path: 'notify', body: { text: 'test_notification' })
+      @device.notify('test_notification', color: :red)
+      expect_request(method: :post, path: 'notify', body: { text: 'test_notification', color: "#ff0000" })
     end
   end
 
@@ -196,14 +196,6 @@ describe AwtrixControl::Device do
   end
 
   describe '#delete_app' do
-    it 'deletes an app from the device' do
-      app = AwtrixControl::App.new('test_app')
-      @device << app
-      @device.delete_app(app)
-      expect(@device.apps).to eq({})
-      expect_request(method: :post, path: 'custom?name=test_app', body: {})
-    end
-
     it 'deletes an app by name' do
       app = AwtrixControl::App.new('test_app')
       @device << app
@@ -234,14 +226,6 @@ describe AwtrixControl::Device do
   end
 
   describe '#push_app' do
-    it 'pushes an app to the device' do
-      app = AwtrixControl::App.new('test_app')
-      @device.push_app(app)
-      expect_request(method: :post,
-                     path: 'custom?name=test_app',
-                     body: { "name": "test_app" }.merge(app.default_payload))
-    end
-
     it 'pushes an app to the device by name' do
       app = @device.new_app(:test_app)
       @device.push_app(:test_app)
@@ -254,9 +238,9 @@ describe AwtrixControl::Device do
     it 'does not push apps from other devices' do
       other_device = AwtrixControl::Device.new('192.168.0.2')
       app = other_device.new_app(:test_app)
-      expect do
-        @device.push_app(app)
-      end.to raise_error(ArgumentError, "App test_app not found on client 1.1.1.1")
+        @device.push_app(:test_app)
+
+      expect(WebMock).not_to have_requested(:post, "http://#{DEFAULT_HOST}/api/custom")
     end
   end
 end

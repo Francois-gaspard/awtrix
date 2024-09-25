@@ -4,8 +4,8 @@ require 'spec_helper'
 
 describe AwtrixControl::App do
   before do
-    @client = AwtrixControl::Client.new(DEFAULT_HOST)
-    @app = AwtrixControl::App.new('test_app')
+    @device = AwtrixControl::Device.new(DEFAULT_HOST)
+    @app = AwtrixControl::App.new(:test_app)
   end
 
   # describe '.awtrix_key_to_method_name' do
@@ -17,7 +17,7 @@ describe AwtrixControl::App do
 
   describe '#initialize' do
     it 'initializes instance variables' do
-      expect(@app.name).to eq('test_app')
+      expect(@app.name).to eq(:test_app)
       expect(@app.payload)
         .to eq(
               {
@@ -43,6 +43,11 @@ describe AwtrixControl::App do
               }
 
             )
+    end
+
+    it 'registers the app on the device if device is present' do
+      app = AwtrixControl::App.new(:test_app, device: @device)
+      expect(@device.apps[:test_app]).to eq(app)
     end
   end
 
@@ -113,6 +118,25 @@ describe AwtrixControl::App do
       @app.payload = { 'center' => true }
       expect(@app.center_text).to eq(true)
     end
+  end
+
+  describe '#device=' do
+    it 'sets the device' do
+      @app.device = @device
+      expect(@app.device).to eq(@device)
+      expect(@device.apps[:test_app]).to eq(@app)
+    end
+
+    it 'unregisters the app from a device before adding it to another device' do
+      device2 = AwtrixControl::Device.new(DEFAULT_HOST)
+      @app.device = @device
+      expect(@device.apps[:test_app]).to eq(@app)
+      @app.device = device2
+      expect(@device.apps[:test_app]).to be_nil
+      expect(device2.apps[:test_app]).to eq(@app)
+    end
+
+
   end
 
   describe '#disable_scroll=' do

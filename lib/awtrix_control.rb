@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require 'awtrix_control/app'
-require 'awtrix_control/client'
+require 'awtrix_control/device'
 require 'awtrix_control/request'
 
 module AwtrixControl
+  include AwtrixControl::Request
+
   COLOR_MAPPINGS = {
     black: '#000000',
     blue: '#0000ff',

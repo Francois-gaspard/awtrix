@@ -136,7 +136,6 @@ describe AwtrixControl::App do
       expect(device2.apps[:test_app]).to eq(@app)
     end
 
-
   end
 
   describe '#disable_scroll=' do
@@ -338,6 +337,14 @@ describe AwtrixControl::App do
     it 'gets the progress bar background color' do
       @app.payload = { 'progressBC' => '#ff0000' }
       expect(@app.progress_bar_background_color).to eq('#ff0000')
+    end
+  end
+
+  describe '#push' do
+    it 'pushes the app to the device' do
+      @app.device = @device
+      expect(@device).to receive(:push_app).with(:test_app)
+      @app.push
     end
   end
 

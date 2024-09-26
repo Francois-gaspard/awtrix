@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'awtrix_control'
-  spec.version       = '0.0.1'
+  spec.version       = '0.0.2'
   spec.required_ruby_version = '>= 3.3'
   spec.authors       = ['Francois Gaspard']
   spec.email         = ['fr@ncois.email']

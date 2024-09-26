@@ -80,7 +80,7 @@ module AwtrixControl
     # Pushes the app to the associated device.
     def push
       return if @device.nil?
-      @device.push_app(self)
+      @device.push_app(name)
     end
 
     # Define getters for each attribute in ATTRIBUTES.

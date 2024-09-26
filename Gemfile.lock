@@ -42,7 +42,7 @@ PLATFORMS
 
 DEPENDENCIES
   awtrix_control!
-  rspec
+  rspec (~> 3.0)
   webmock
 
 BUNDLED WITH

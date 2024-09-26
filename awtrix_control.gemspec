@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['fr@ncois.email']
   spec.summary       = 'Control AWTRIX 3 devices'
   spec.description   = 'A gem to control AWTRIX 3 devices from Ruby'
-  spec.homepage      = 'TBD'
+  spec.homepage      = 'https://github.com/Francois-gaspard/awtrix'
   spec.license       = 'MIT'
 
   spec.files         = Dir['lib/**/*.rb']
@@ -14,5 +14,5 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'rspec', '~> 3.0'
 end
